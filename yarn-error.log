@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add express-session
+  /usr/local/bin/node /usr/local/bin/yarn add joi jsonwebtoken
 
 PATH: 
   /Library/Frameworks/Python.framework/Versions/3.10/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Applications/Postgres.app/Contents/Versions/latest/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin
@@ -14,8 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com
-      at GetAddrInfoReqWrap.onlookup [as oncomplete] (node:dns:107:26)
+  Error: 00A6701401000000:error:0A00010B:SSL routines:ssl3_get_record:wrong version number:../deps/openssl/openssl/ssl/record/ssl3_record.c:332:
 
 npm manifest: 
   {
@@ -23,17 +22,25 @@ npm manifest:
     "version": "1.0.0",
     "main": "app.js",
     "license": "MIT",
+    "engines": {
+      "node": ">=14.0.0"
+    },
     "scripts": {
       "compile": "tsc -w",
       "dev": "nodemon src/app.ts",
       "test": "jest"
     },
     "dependencies": {
+      "@types/bcrypt": "^5.0.1",
+      "@types/express-session": "^1.17.9",
       "bcrypt": "^5.1.1",
+      "connect-redis": "^7.1.0",
+      "connect-redis-stack": "^0.1.1",
       "cookie-parser": "^1.4.6",
       "cors": "^2.8.5",
       "dotenv": "^16.3.1",
       "express": "^4.18.2",
+      "express-session": "^1.17.3",
       "ioredis": "^5.3.2",
       "jest": "^29.7.0",
       "mongoose": "^7.6.3",
@@ -1487,6 +1494,13 @@ Lockfile:
     dependencies:
       "@babel/types" "^7.20.7"
   
+  "@types/bcrypt@^5.0.1":
+    version "5.0.1"
+    resolved "https://registry.yarnpkg.com/@types/bcrypt/-/bcrypt-5.0.1.tgz#50a6a662ad6a14c44ae7b25633cfadddf7a85f45"
+    integrity sha512-dIIrEsLV1/v0AUNI8oHMaRRTSeVjoy5ID8oclJavtPj8CwPJoD1eFoNXEypuu6k091brEzBeOo3LlxeAH9zRZg==
+    dependencies:
+      "@types/node" "*"
+  
   "@types/body-parser@*":
     version "1.19.4"
     resolved "https://registry.npmjs.org/@types/body-parser/-/body-parser-1.19.4.tgz"
@@ -1523,6 +1537,13 @@ Lockfile:
       "@types/qs" "*"
       "@types/range-parser" "*"
       "@types/send" "*"
+  
+  "@types/express-session@^1.17.9":
+    version "1.17.9"
+    resolved "https://registry.yarnpkg.com/@types/express-session/-/express-session-1.17.9.tgz#2811b8c3f2e7efb5fd239e4cb0f26f58de8c0a62"
+    integrity sha512-yIqficLlTPdloeEPhOVenpOUWILkdaXHUWhTOqFGx9JoSuTgeatNjb97k8VvJehbTk0kUSUAHy5r27PXMga89Q==
+    dependencies:
+      "@types/express" "*"
   
   "@types/express@*", "@types/express@^4.17.20":
     version "4.17.20"
@@ -2110,6 +2131,16 @@ Lockfile:
     resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
     integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
   
+  connect-redis-stack@^0.1.1:
+    version "0.1.1"
+    resolved "https://registry.yarnpkg.com/connect-redis-stack/-/connect-redis-stack-0.1.1.tgz#23d983fff7f390ddf30adf93e14a26ac96398e8f"
+    integrity sha512-d3wIbs2+QQgBFDkv1sK7HyKozS9XEJLf6YYLDqWvZ2ONi/YNN1FmwWmWc/Vx/Z/bmVpZEpQndp2YmyHLeHvQAQ==
+  
+  connect-redis@^7.1.0:
+    version "7.1.0"
+    resolved "https://registry.yarnpkg.com/connect-redis/-/connect-redis-7.1.0.tgz#6618334697f2ed91536848cdc03734def2138acf"
+    integrity sha512-UaqO1EirWjON2ENsyau7N5lbkrdYBpS6mYlXSeff/OYXsd6EGZ+SXSmNPoljL2PSua8fgjAEaldSA73PMZQ9Eg==
+  
   console-control-strings@^1.0.0, console-control-strings@^1.1.0:
     version "1.1.0"
     resolved "https://registry.npmjs.org/console-control-strings/-/console-control-strings-1.1.0.tgz"
@@ -2149,6 +2180,11 @@ Lockfile:
     version "0.4.1"
     resolved "https://registry.npmjs.org/cookie/-/cookie-0.4.1.tgz"
     integrity sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==
+  
+  cookie@0.4.2:
+    version "0.4.2"
+    resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.4.2.tgz#0e41f24de5ecf317947c82fc789e06a884824432"
+    integrity sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==
   
   cookie@0.5.0:
     version "0.5.0"
@@ -2397,6 +2433,20 @@ Lockfile:
       jest-matcher-utils "^29.7.0"
       jest-message-util "^29.7.0"
       jest-util "^29.7.0"
+  
+  express-session@^1.17.3:
+    version "1.17.3"
+    resolved "https://registry.yarnpkg.com/express-session/-/express-session-1.17.3.tgz#14b997a15ed43e5949cb1d073725675dd2777f36"
+    integrity sha512-4+otWXlShYlG1Ma+2Jnn+xgKUZTMJ5QD3YvfilX3AcocOAbIkVylSWEklzALe/+Pu4qV6TYBj5GwOBFfdKqLBw==
+    dependencies:
+      cookie "0.4.2"
+      cookie-signature "1.0.6"
+      debug "2.6.9"
+      depd "~2.0.0"
+      on-headers "~1.0.2"
+      parseurl "~1.3.3"
+      safe-buffer "5.2.1"
+      uid-safe "~2.1.5"
   
   express@^4.18.2:
     version "4.18.2"
@@ -3771,6 +3821,11 @@ Lockfile:
     dependencies:
       side-channel "^1.0.4"
   
+  random-bytes@~1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/random-bytes/-/random-bytes-1.0.0.tgz#4f68a1dc0ae58bd3fb95848c30324db75d64360b"
+    integrity sha512-iv7LhNVO047HzYR3InF6pUcUsPQiHTM1Qal51DcGSuZFBil1aBBWG5eHPNek7bvILMaYJ/8RU1e8w1AMdHmLQQ==
+  
   range-parser@~1.2.1:
     version "1.2.1"
     resolved "https://registry.npmjs.org/range-parser/-/range-parser-1.2.1.tgz"
@@ -4304,6 +4359,13 @@ Lockfile:
     version "5.2.2"
     resolved "https://registry.npmjs.org/typescript/-/typescript-5.2.2.tgz"
     integrity sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==
+  
+  uid-safe@~2.1.5:
+    version "2.1.5"
+    resolved "https://registry.yarnpkg.com/uid-safe/-/uid-safe-2.1.5.tgz#2b3d5c7240e8fc2e58f8aa269e5ee49c0857bd3a"
+    integrity sha512-KPHm4VL5dDXKz01UuEd88Df+KzynaohSL9fBh096KWAxSKZQDI2uBrVqtvRM4rwrIrRRKsdLNML/lnaaVSRioA==
+    dependencies:
+      random-bytes "~1.0.0"
   
   undefsafe@^2.0.5:
     version "2.0.5"
