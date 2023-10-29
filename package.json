@@ -12,6 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.1",
     "@types/express-session": "^1.17.9",
     "bcrypt": "^5.1.1",
     "connect-redis": "^7.1.0",
