@@ -1,0 +1,37 @@
+version: '3'
+services:
+  api:
+    build:
+      context: src
+    container_name: gomoney
+    ports:
+      - "4000:4000"  
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: "production"
+    networks:
+      - backend-network
+  redis:
+    image: "redis:alpine"
+    container_name: "gomoney-redis"
+    ports:
+      - "6380:6379"
+    networks:
+      - backend-network
+  db:
+    image: mongo:latest
+    container_name: mongo-db
+    ports:
+      - "27017:27017"  
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
+volumes:
+  go-money:

@@ -15,13 +15,40 @@ const user_1 = __importDefault(require("./routes/user"));
 const team_1 = __importDefault(require("./routes/team"));
 const fixtures_1 = __importDefault(require("./routes/fixtures"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const redis_1 = require("redis");
+const body_parser_1 = __importDefault(require("body-parser"));
 exports.app = (0, express_1.default)();
 dotenv_1.default.config();
 // app.use(cors({ origin: "*" }));
 exports.app.use(express_1.default.json());
 exports.app.use((0, morgan_1.default)("dev"));
 exports.app.use((0, cookie_parser_1.default)());
-const port = process.env.PORT || 3003;
+const port = process.env.PORT || 3030;
+exports.app.use(body_parser_1.default.urlencoded({ extended: true }));
+const Redis = async () => {
+    const client = await (0, redis_1.createClient)()
+        .on('error', err => console.log('Redis Client Error', err))
+        .on('connect', () => console.log("Redis Client connected successfully"))
+        .connect();
+    await client.set('key', 'value');
+    const value = await client.get('key');
+    await client.disconnect();
+};
+Redis();
+// const RedisStore = new connectRedis(session)
+// //Configure redis client
+// const redisClient = createClient({
+//   socket: {
+//     host: 'localhost',
+//     port: 6379
+//   }
+// })
+// redisClient.on('error', function (err) {
+//     console.log('Could not establish a connection with redis. ' + err);
+// });
+// redisClient.on('connect', function (err) {
+//     console.log('Connected to redis successfully');
+// });
 mongoose_1.default.connect(config_1.DB_URL, {
     retryWrites: true,
     w: 'majority'

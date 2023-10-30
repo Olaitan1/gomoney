@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Admin = exports.authMiddleware = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const index_1 = require("../config/index");
+const user_model_1 = __importDefault(require("../model/user.model"));
+;
 const authMiddleware = async (req, res, next) => {
     try {
         const token = req.header("Authorization")?.replace("Bearer ", "");
@@ -16,6 +18,11 @@ const authMiddleware = async (req, res, next) => {
         }
         const decoded = jsonwebtoken_1.default.verify(token, index_1.appSecret);
         req.token = decoded;
+        const user = await user_model_1.default.findById(decoded.id);
+        if (!user) {
+            throw new Error(`not Authorized`);
+        }
+        req.user = user;
         next();
     }
     catch (error) {

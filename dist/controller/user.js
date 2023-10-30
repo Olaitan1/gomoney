@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userLogin = exports.RegisterUser = void 0;
-const user_model_1 = require("../model/user.model");
+const user_model_1 = __importDefault(require("../model/user.model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const utility_1 = require("../utils/utility");
 const RegisterUser = async (req, res) => {
@@ -20,7 +20,7 @@ const RegisterUser = async (req, res) => {
         const salt = await (0, utility_1.GenerateSalt)(10);
         //Encrypting password
         const userPassword = await (0, utility_1.GeneratePassword)(password, salt);
-        const user = await user_model_1.User.findOne({ $or: [{ email }, { username }] });
+        const user = await user_model_1.default.findOne({ $or: [{ email }, { username }] });
         if (user) {
             if (user.username === username) {
                 return res.status(400).json({ Error: "Username already exists" });
@@ -30,7 +30,7 @@ const RegisterUser = async (req, res) => {
             }
         }
         //create user
-        const newUser = await user_model_1.User.create({
+        const newUser = await user_model_1.default.create({
             username,
             email,
             phone,
@@ -58,7 +58,7 @@ const userLogin = async (req, res) => {
                 .json({ Error: validateRegister.error.details[0].message });
         }
         // Find the user by email
-        const user = await user_model_1.User.findOne({ email });
+        const user = await user_model_1.default.findOne({ email });
         // Check if the user exists
         if (!user) {
             return res.status(404).json({ error: "Not a registered User" });

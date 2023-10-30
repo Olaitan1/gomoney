@@ -41,7 +41,8 @@ export const authMiddleware = async (
         throw new Error(`not Authorized`);
       }
      
-      req.user = user;
+    req.user = user;
+    
 
     next();
   } catch (error) {
@@ -51,7 +52,6 @@ export const authMiddleware = async (
 
 export const Admin = (req: Request, res: Response, next: NextFunction) => {
     if (req.user && req.user.role === 'admin') {
-      console.log(req.user)
     next();
   } else {
     return res.status(403).json({ message: 'Not authorized to perform this action' });

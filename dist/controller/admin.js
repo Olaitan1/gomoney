@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteFixture = exports.UpdateFixture = exports.SingleFixture = exports.AllFixtures = exports.CreateFixture = exports.deleteTeam = exports.updateTeam = exports.getTeamById = exports.getAllTeams = exports.createTeam = exports.AdminLogin = exports.RegisterAdmin = void 0;
-const user_model_1 = require("../model/user.model");
+const user_model_1 = __importDefault(require("../model/user.model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const team_model_1 = require("../model/team.model");
 const utility_1 = require("../utils/utility");
@@ -23,7 +23,7 @@ const RegisterAdmin = async (req, res) => {
         const salt = await (0, utility_1.GenerateSalt)(10);
         //Encrypting password
         const adminPassword = await (0, utility_1.GeneratePassword)(password, salt);
-        const admin = await user_model_1.User.findOne({ $or: [{ email }, { username }] });
+        const admin = await user_model_1.default.findOne({ $or: [{ email }, { username }] });
         if (admin) {
             if (admin.username === username) {
                 return res.status(400).json({ Error: "Username already exists" });
@@ -33,7 +33,7 @@ const RegisterAdmin = async (req, res) => {
             }
         }
         //create admin
-        const newAdmin = await user_model_1.User.create({
+        const newAdmin = await user_model_1.default.create({
             username,
             email,
             password: adminPassword,
@@ -60,7 +60,7 @@ const AdminLogin = async (req, res) => {
                 .json({ Error: validateRegister.error.details[0].message });
         }
         // Find the admin by email
-        const admin = await user_model_1.User.findOne({ email });
+        const admin = await user_model_1.default.findOne({ email });
         // Check if the admin exists
         if (!admin) {
             return res.status(404).json({ error: "Not a registered User" });
@@ -76,6 +76,7 @@ const AdminLogin = async (req, res) => {
             email: admin.email,
             role: '',
         });
+        let session = req.session;
         res.status(200).json({ token, admin });
     }
     catch (error) {
@@ -121,7 +122,7 @@ const createTeam = async (req, res) => {
 };
 exports.createTeam = createTeam;
 // Get a list of all teams
-const getAllTeams = async (_, res) => {
+const getAllTeams = async (req, res) => {
     try {
         const teams = await team_model_1.Team.find();
         res.status(200).json(teams);
