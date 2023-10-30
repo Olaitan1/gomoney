@@ -9,10 +9,14 @@ import userRouter from './routes/user'
 import teamRouter from './routes/team'
 import fixtureRouter from './routes/fixtures'
 import dotenv from 'dotenv';
-import { createClient } from 'redis';
+import { createClient  } from 'redis';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
-import bodyParser from 'body-parser'
+import bodyParser from 'body-parser';
+import expressSession from 'express-session';
+const redisClient = createClient();
+import  RedisStore  from 'connect-redis';
+
 export const app = express();
 
 dotenv.config()
@@ -23,37 +27,14 @@ app.use(cookieParser());
 const port = process.env.PORT || 3030;
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const Redis = async () =>
-{
-  const client = await createClient()
-    .on('error', err => console.log('Redis Client Error', err))
-    .on('connect', () => console.log("Redis Client connected successfully"))
+const sessionStore = new RedisStore({ client: redisClient });
+const sessionMiddleware = expressSession({
+  store: sessionStore,
+  secret: appSecret,
+});
 
-  .connect();
+app.use(sessionMiddleware);
 
-await client.set('key', 'value');
-const value = await client.get('key');
-await client.disconnect();
-}
-
-Redis();
-
-// const RedisStore = new connectRedis(session)
-// //Configure redis client
-// const redisClient = createClient({
-//   socket: {
-//     host: 'localhost',
-//     port: 6379
-//   }
-// })
-  
-    
-// redisClient.on('error', function (err) {
-//     console.log('Could not establish a connection with redis. ' + err);
-// });
-// redisClient.on('connect', function (err) {
-//     console.log('Connected to redis successfully');
-// });
 
 mongoose.connect(DB_URL, {
     retryWrites: true,

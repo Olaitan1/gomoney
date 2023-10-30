@@ -46,7 +46,7 @@ export const authMiddleware = async (
 
     next();
   } catch (error) {
-    res.status(401).send("Not Authorized, Please authenticate");
+    res.status(401).send("Not Authorized, Please login");
   }
 };
 
